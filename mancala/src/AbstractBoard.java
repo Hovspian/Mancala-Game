@@ -7,7 +7,7 @@ import javax.swing.*;
 
 public abstract class AbstractBoard implements BoardStrategy 
 {
-	private JPanel parent;
+	private Board parent;
 	private Color boardColor;
 	private Color pitColor;
 	private Color stoneColor;
@@ -15,43 +15,49 @@ public abstract class AbstractBoard implements BoardStrategy
 	private Shape boardShape;
 	private Shape mancalaShape;
 	private Shape pitShape;
-	
-//	protected static final int BOARD_SIZE = 
-	
+	private Mancala game;
+
 	public AbstractBoard(Color boardColor, Color pitColor, Color stoneColor, Color textColor, Shape boardShape, Shape mancalaShape, Shape pitShape)
 	{
 		this.boardColor = boardColor;
 		this.pitColor = pitColor;
 		this.stoneColor = stoneColor;
 		this.textColor = textColor;
-		
+
 		this.boardShape = boardShape;
 		this.mancalaShape = mancalaShape;
 		this.pitShape = pitShape;
 	}
-	public AbstractBoard()
-	{
-		
-	}
 
-	
+
 	public void setParent(Board b)
 	{
 		this.parent = b;
+		game = parent.getGame();
 	}
-	
-	
+
+
 	@Override
 	public void drawAll() 
 	{
 		drawPits();
 	}
-	
+
 	public JLabel drawMancala()
 	{
-		return new JLabel(new Mancala(mancalaShape, pitColor, stoneColor));
+		int[] arr;
+		if (parent.getGame().getTurn())
+		{
+			arr = parent.getGame().checkPit1();
+		}
+		else
+		{
+			arr = parent.getGame().checkPit2();
+		}
+		int stones = arr[6];
+		return new JLabel(new MancalaIcon(stones, mancalaShape, pitColor, stoneColor));
 	}
-	
+
 	public JPanel drawPits()
 	{
 		JPanel fullPanel = new JPanel(new BorderLayout());
@@ -60,59 +66,72 @@ public abstract class AbstractBoard implements BoardStrategy
 		JPanel bottomPanel = new JPanel();
 		topPanel.setOpaque(false);
 		bottomPanel.setOpaque(false);
-		for (int i = 6; i > 0; i--)
+
+		boolean turn = game.getTurn();
+		int[] player1Pits = game.checkPit1();
+		int[] player2Pits = game.checkPit2();
+
+		for (int i = 5; i >= 0; i--)
 		{
 			JPanel pitPanel = new JPanel(new BorderLayout());
 			pitPanel.setOpaque(false);
-			
-			JLabel pitNumber = new JLabel("             B" + i);
+
+			JLabel pitNumber = new JLabel("             B" + (i + 1));
 			pitNumber.setForeground(textColor);
 			pitPanel.add(pitNumber, BorderLayout.NORTH);
-			
-			JLabel pit = new JLabel(new Pit(pitShape, pitColor, stoneColor));
-			pit.addMouseListener(new MouseAdapter()
+
+			PitIcon pit = new PitIcon(player2Pits[i], 3, pitShape, pitColor, stoneColor);
+			JLabel label = new JLabel(pit);
+
+			if (!turn)
 			{
-				public void mouseClicked(MouseEvent e)
+				label.addMouseListener(new MouseAdapter()
 				{
-					System.out.println("Clicked B");
-					//game.moveMancala(i + 7);
-				}
-			});
-			pitPanel.add(pit, BorderLayout.SOUTH);
+					public void mouseClicked(MouseEvent e)
+					{
+						System.out.println("Clicked B");
+						game.pitLogic(pit.getPosition());
+					}
+				});
+			}
+			pitPanel.add(label, BorderLayout.SOUTH);
 			topPanel.add(pitPanel);
 		}
-		
-		
-		for (int i = 1; i <= 6; i++)
+
+
+		for (int i = 0; i <= 5; i++)
 		{
 			JPanel pitPanel = new JPanel(new BorderLayout());
 			pitPanel.setOpaque(false);
-			
-			JLabel pitNumber = new JLabel("             A" + i);
+
+			JLabel pitNumber = new JLabel("             A" + (i + 1));
 			pitNumber.setForeground(textColor);
 			pitPanel.add(pitNumber, BorderLayout.SOUTH);
 
-			JLabel pit = new JLabel(new Pit(pitShape, pitColor, stoneColor));
-			pit.addMouseListener(new MouseAdapter()
+			PitIcon pit = new PitIcon(player1Pits[i], 3, pitShape, pitColor, stoneColor);
+			JLabel label = new JLabel(pit);
+
+			if (turn)
 			{
-				public void mouseClicked(MouseEvent e)
+				label.addMouseListener(new MouseAdapter()
 				{
-					System.out.println("Clicked A");
-					//game.moveMancala(i - 1);
-				}
-			});
-			pitPanel.add(pit, BorderLayout.NORTH);
-			
+					public void mouseClicked(MouseEvent e)
+					{
+						System.out.println("Clicked A");
+						game.pitLogic(pit.getPosition());
+					}
+				});
+			}
+			pitPanel.add(label, BorderLayout.NORTH);
+
 			bottomPanel.add(pitPanel);
 		}
-		
-		
-		
+
 		fullPanel.add(topPanel, BorderLayout.NORTH);
 		fullPanel.add(bottomPanel, BorderLayout.SOUTH);
 		return fullPanel;
 	}
-	
+
 	public void drawBackground(Graphics2D g2)
 	{
 		g2.setColor(boardColor);
@@ -120,7 +139,7 @@ public abstract class AbstractBoard implements BoardStrategy
 		g2.setColor(Color.BLACK);
 		g2.draw(boardShape);
 	}
-	
+
 	protected JPanel getParent()
 	{
 		return parent;

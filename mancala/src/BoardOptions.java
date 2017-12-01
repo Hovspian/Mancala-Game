@@ -9,12 +9,12 @@ public class BoardOptions
 	public BoardOptions()
 	{
 		JFrame frame = new JFrame();
-		
-		
+
+
 		JTextArea header = new JTextArea("Choose a board layout:");
 		header.setEditable(false);
 		frame.add(header, BorderLayout.NORTH);
-		
+
 		JPanel buttonPanel = new JPanel();
 		JButton simpleButton = new JButton("Simple");
 		JButton otherButton = new JButton("Other");
@@ -23,7 +23,7 @@ public class BoardOptions
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
-				new Board(new SimpleBoard());
+				new Board(new Mancala("a", "b", 3), new SimpleBoard());
 				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 			}
 		});
@@ -32,15 +32,15 @@ public class BoardOptions
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
-				new Board(new RigidBoard());
+				new Board(new Mancala("a", "b", 3), new RigidBoard());
 				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 			}
 		});
 		buttonPanel.add(simpleButton);
 		buttonPanel.add(otherButton);
 		frame.add(buttonPanel, BorderLayout.SOUTH);
-		
-		
+
+
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
