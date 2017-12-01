@@ -15,6 +15,10 @@ public class Mancala {
         p2 = new Players(name2, stones);
         turn = true; //true = player1 turn
     }
+    
+    public boolean getTurn(){
+        return this.turn;
+    }
     public String winner(){//called when there's no more undo to do, at the very end to determine winner
         lastState1 = p1.getBoard();
         lastState2 = p2.getBoard();
