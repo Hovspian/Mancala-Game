@@ -19,6 +19,14 @@ public class Mancala {
     public boolean getTurn(){
         return this.turn;
     }
+    
+    public int[] checkPit1(){
+        return p1.getBoard();
+    }
+    
+    public int[] checkPit2(){
+        return p2.getBoard();
+    }
     public String winner(){//called when there's no more undo to do, at the very end to determine winner
         lastState1 = p1.getBoard();
         lastState2 = p2.getBoard();
