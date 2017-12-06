@@ -4,7 +4,11 @@ import java.awt.event.*;
 import javax.swing.*;
 
 
-
+/**
+ * 
+ * @author Aldrich Reboja
+ *
+ */
 public class BoardOptions 
 {
 
@@ -87,6 +91,7 @@ public class BoardOptions
 	public static void generateGame(Board b, int stones)
 	{
 		JFrame frame = new JFrame();
+		frame.setTitle("Mancala v1 (CS151)");
 		frame.setLayout(new BorderLayout());
 		JPanel gamePanel = new JPanel();
 		gamePanel.add(b);
@@ -102,8 +107,20 @@ public class BoardOptions
 					}
 			
 				});
-		buttonPanel.add(style);
+		JButton undo = new JButton("Undo");
+		undo.addActionListener(new ActionListener()
+		{
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Method for undoing the game.
+				//StateChanged Method too.
+			}
+			
+		});
 		
+		buttonPanel.add(style, BorderLayout.CENTER);
+		buttonPanel.add(undo, BorderLayout.SOUTH);
 		
 		frame.add(gamePanel, BorderLayout.CENTER);
 		frame.add(buttonPanel, BorderLayout.SOUTH);
