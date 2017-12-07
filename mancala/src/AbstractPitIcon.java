@@ -32,16 +32,6 @@ public abstract class AbstractPitIcon implements Icon
 		return width;
 	}
 
-	protected void setStones(int amount)
-	{
-		stones = amount;
-	}
-
-	protected void addOne()
-	{
-		stones++;
-	}
-
 	public int getStones()
 	{
 		return stones;

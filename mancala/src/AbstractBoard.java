@@ -60,6 +60,8 @@ public abstract class AbstractBoard implements BoardStrategy
 
 	public JPanel drawPits()
 	{
+		Mancala game = parent.getGame();
+
 		JPanel fullPanel = new JPanel(new BorderLayout());
 		fullPanel.setOpaque(false);
 		JPanel topPanel = new JPanel();
@@ -80,7 +82,7 @@ public abstract class AbstractBoard implements BoardStrategy
 			pitNumber.setForeground(textColor);
 			pitPanel.add(pitNumber, BorderLayout.NORTH);
 
-			PitIcon pit = new PitIcon(player2Pits[i], 3, pitShape, pitColor, stoneColor);
+			PitIcon pit = new PitIcon(i, player2Pits[i], pitShape, pitColor, stoneColor);
 			JLabel label = new JLabel(pit);
 
 			if (!turn)
@@ -108,7 +110,7 @@ public abstract class AbstractBoard implements BoardStrategy
 			pitNumber.setForeground(textColor);
 			pitPanel.add(pitNumber, BorderLayout.SOUTH);
 
-			PitIcon pit = new PitIcon(player1Pits[i], 3, pitShape, pitColor, stoneColor);
+			PitIcon pit = new PitIcon(i, player1Pits[i], pitShape, pitColor, stoneColor);
 			JLabel label = new JLabel(pit);
 
 			if (turn)

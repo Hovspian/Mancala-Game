@@ -27,6 +27,7 @@ public class Board extends JPanel implements ChangeListener
 
 	public void draw()
 	{
+		this.removeAll();
 		this.add(strategy.drawPits(), BorderLayout.CENTER);
 		this.add(strategy.drawMancala(), BorderLayout.WEST);
 		this.add(strategy.drawMancala(), BorderLayout.EAST);
