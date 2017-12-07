@@ -9,11 +9,22 @@ public class Mancala {
     private int[] lastState1;
     private int[] lastState2; //these two are for copying the last state so we can use it to undo
     private boolean turn; //true == player1's turn; false == player2's turn
+    private ArrayList<ChangeListener> listeners = new ArrayList<ChangeListener>();
     
     public Mancala(String name1, String name2, int stones){ //determine if we want to randomize the turn, select a turn
         p1 = new Players(name1, stones);
         p2 = new Players(name2, stones);
         turn = true; //true = player1 turn
+    }
+    
+    public void attach(ChangeListener l){
+        listeners.add(l);
+    }
+    
+    public void notifyListeners(){
+        for(ChangeListener l : listeners){
+            l.stateChanged(new ChangeEvent(this));
+        }
     }
     
     public boolean getTurn(){
@@ -55,12 +66,13 @@ public class Mancala {
         if (checkEnd() && prevTurn == turn){ //if the game's over, but the player that went dropped the last stone into their own mancala
             turn = !turn;
         }
-        
+        notifyListeners();
     }
     
     public void undoBoard(){
         p1.setBoard(lastState1);
         p2.setBoard(lastState2);
+        notifyListeners();
     }
     
     public boolean checkEnd(){ //returns false is the game is not over, returns true if one side of the board is cleared
