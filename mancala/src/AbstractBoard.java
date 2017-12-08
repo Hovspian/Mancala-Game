@@ -43,18 +43,21 @@ public abstract class AbstractBoard implements BoardStrategy
 		drawPits();
 	}
 
-	public JLabel drawMancala()
+	public JLabel drawMancala(String player)
 	{
-		int[] arr;
-		if (parent.getGame().getTurn())
+		int stones;
+		if (player.equals("a"))
 		{
-			arr = parent.getGame().checkPit1();
+			stones = parent.getGame().checkPit1()[6];
+		}
+		else if (player.equals("b"))
+		{
+			stones = parent.getGame().checkPit2()[6];
 		}
 		else
 		{
-			arr = parent.getGame().checkPit2();
+			return null;
 		}
-		int stones = arr[6];
 		return new JLabel(new MancalaIcon(stones, mancalaShape, pitColor, stoneColor));
 	}
 

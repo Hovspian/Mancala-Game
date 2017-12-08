@@ -9,7 +9,7 @@ public interface BoardStrategy
 {
 	
 	void drawAll();
-	JLabel drawMancala();
+	JLabel drawMancala(String player);
 	JPanel drawPits();
 	void setParent(Board b);
 	void drawBackground(Graphics2D g2);
@@ -17,4 +17,5 @@ public interface BoardStrategy
 	Dimension BOARD_SIZE = new Dimension(900, 300);
 	Dimension MANCALA_SIZE = new Dimension(90, 270);
 	Dimension PIT_SIZE = new Dimension(90, 90);
+	int STONE_SIZE = 8;
 }
