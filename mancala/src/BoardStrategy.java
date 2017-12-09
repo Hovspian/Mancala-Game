@@ -28,7 +28,7 @@ public interface BoardStrategy
 	 * @param g2 the Graphics2D object being used to draw the board
 	 */
 	void drawBackground(Graphics2D g2);
-	
+
 	Dimension BOARD_SIZE = new Dimension(900, 300);
 	Dimension MANCALA_SIZE = new Dimension(90, 270);
 	Dimension PIT_SIZE = new Dimension(90, 90);

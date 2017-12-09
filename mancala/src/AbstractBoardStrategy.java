@@ -3,7 +3,9 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * An abstract class that defines the strategy for the board and draws them using the template method pattern.
+ * An abstract class that defines the strategy for the board.
+ * This class will draw the different aspects of the board using the template method pattern.
+ * Subclasses only need to define the shapes and colors of each part of the board using the constructor.
  * 
  * @author Hovsep Lalikian
  *
@@ -38,12 +40,13 @@ public abstract class AbstractBoardStrategy implements BoardStrategy
 		this.pitShape = pitShape;
 	}
 
-
+	@Override
 	public JLabel drawMancala(int stones)
 	{
 		return new JLabel(new MancalaIcon(stones, mancalaShape, pitColor, stoneColor));
 	}
 
+	@Override
 	public JPanel drawPits(Mancala game)
 	{
 		JPanel fullPanel = new JPanel(new BorderLayout());
@@ -78,7 +81,7 @@ public abstract class AbstractBoardStrategy implements BoardStrategy
 					public void mouseClicked(MouseEvent e)
 					{
 						System.out.println("Clicked B");
-						game.pitLogic(pit.getPosition());
+						game.pitLogic(pit.getIndex());
 					}
 				});
 			}
@@ -108,7 +111,7 @@ public abstract class AbstractBoardStrategy implements BoardStrategy
 					public void mouseClicked(MouseEvent e)
 					{
 						System.out.println("Clicked A");
-						game.pitLogic(pit.getPosition());
+						game.pitLogic(pit.getIndex());
 					}
 				});
 			}
@@ -122,6 +125,7 @@ public abstract class AbstractBoardStrategy implements BoardStrategy
 		return fullPanel;
 	}
 
+	@Override
 	public void drawBackground(Graphics2D g2)
 	{
 		g2.setColor(boardColor);
