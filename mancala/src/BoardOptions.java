@@ -92,7 +92,7 @@ public class BoardOptions
 	 * @param b
 	 * @param stones
 	 */
-	public static void generateGame(Board b, int stones)
+	public void generateGame(Board b, int stones)
 	{
 		JFrame frame = new JFrame();
 		frame.setLayout(new BorderLayout());
@@ -116,7 +116,8 @@ public class BoardOptions
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				b.getGame().undoBoard();
+				System.out.println("Undoing");
+				m.undoBoard();
 			}
 
 		});
@@ -129,7 +130,7 @@ public class BoardOptions
 		frame.add(buttonPanel, BorderLayout.SOUTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
-		frame.setLocation(500, 400);
+		frame.setLocation(500, 300);
 		frame.setVisible(true);
 	}
 
@@ -234,7 +235,7 @@ public class BoardOptions
 		frame.add(start, BorderLayout.SOUTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
-		frame.setLocation(800, 500);
+		frame.setLocation(880, 508);
 		frame.setVisible(true);
 	}
 	

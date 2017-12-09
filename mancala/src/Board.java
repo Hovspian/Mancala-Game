@@ -48,8 +48,8 @@ public class Board extends JPanel implements ChangeListener
 
 	public void stateChanged(ChangeEvent e)
 	{
-//		if (game.checkEnd()) // If game's over do the final move and make a frame to show winner
-//		{
+		if (game.checkEnd()) // If game's over do the final move and make a frame to show winner
+		{
 			game.finalMove();
 			
 			
@@ -65,7 +65,7 @@ public class Board extends JPanel implements ChangeListener
 			frame.pack();
 			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			frame.setVisible(true);
-//		}
+		}
 		
 		
 		draw();
