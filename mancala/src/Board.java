@@ -17,7 +17,6 @@ public class Board extends JPanel implements ChangeListener
 
 		this.game = game;
 		this.strategy = strategy;
-		this.strategy.setParent(this);
 
 
 		this.setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -28,9 +27,15 @@ public class Board extends JPanel implements ChangeListener
 	public void draw()
 	{
 		this.removeAll();
-		this.add(strategy.drawPits(), BorderLayout.CENTER);
-		this.add(strategy.drawMancala("a"), BorderLayout.EAST);
-		this.add(strategy.drawMancala("b"), BorderLayout.WEST);
+		
+
+		
+		
+		this.add(strategy.drawPits(game), BorderLayout.CENTER);
+		this.add(strategy.drawMancala(game.checkPit1()[6]), BorderLayout.EAST);
+		this.add(strategy.drawMancala(game.checkPit2()[6]), BorderLayout.WEST);
+		
+
 	}
 
 	public void paintComponent(Graphics g)
@@ -43,6 +48,26 @@ public class Board extends JPanel implements ChangeListener
 
 	public void stateChanged(ChangeEvent e)
 	{
+//		if (game.checkEnd()) // If game's over do the final move and make a frame to show winner
+//		{
+			game.finalMove();
+			
+			
+			JFrame frame = new JFrame();
+			
+			JTextArea winner = new JTextArea("Player " + game.winner() + " wins!");
+			
+			winner.setEditable(false);
+			winner.setBackground(Color.WHITE);
+			frame.add(winner);
+			
+			frame.setLocation(800, 500);
+			frame.pack();
+			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			frame.setVisible(true);
+//		}
+		
+		
 		draw();
 		revalidate();
 		repaint();
