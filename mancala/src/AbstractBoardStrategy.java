@@ -1,13 +1,15 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.RoundRectangle2D;
-
 import javax.swing.*;
 
-
-public abstract class AbstractBoard implements BoardStrategy 
+/**
+ * An abstract class that defines the strategy for the board and draws them using the template method pattern.
+ * 
+ * @author Hovsep Lalikian
+ *
+ */
+public abstract class AbstractBoardStrategy implements BoardStrategy 
 {
-	private Board parent;
 	private Color boardColor;
 	private Color pitColor;
 	private Color stoneColor;
@@ -15,14 +17,21 @@ public abstract class AbstractBoard implements BoardStrategy
 	private Shape boardShape;
 	private Shape mancalaShape;
 	private Shape pitShape;
-	private Mancala game;
 
-	public AbstractBoard(Color boardColor, Color pitColor, Color stoneColor, Color textColor, Shape boardShape, Shape mancalaShape, Shape pitShape)
+	/**
+	 * Constructs a BoardStrategy that will draw the specified shapes with the specified colors.
+	 * @param boardColor the board's background color
+	 * @param pitColor the color of the mancalas and pits
+	 * @param boardShape the shape of the board
+	 * @param mancalaShape the shape of the mancalas
+	 * @param pitShape the shape of the pits
+	 */
+	public AbstractBoardStrategy(Color boardColor, Color pitColor, Shape boardShape, Shape mancalaShape, Shape pitShape)
 	{
 		this.boardColor = boardColor;
 		this.pitColor = pitColor;
-		this.stoneColor = stoneColor;
-		this.textColor = textColor;
+		this.stoneColor = Color.BLACK;
+		this.textColor = Color.BLACK;
 
 		this.boardShape = boardShape;
 		this.mancalaShape = mancalaShape;
@@ -30,41 +39,13 @@ public abstract class AbstractBoard implements BoardStrategy
 	}
 
 
-	public void setParent(Board b)
+	public JLabel drawMancala(int stones)
 	{
-		this.parent = b;
-		game = parent.getGame();
-	}
-
-
-	@Override
-	public void drawAll() 
-	{
-		drawPits();
-	}
-
-	public JLabel drawMancala(String player)
-	{
-		int stones;
-		if (player.equals("a"))
-		{
-			stones = parent.getGame().checkPit1()[6];
-		}
-		else if (player.equals("b"))
-		{
-			stones = parent.getGame().checkPit2()[6];
-		}
-		else
-		{
-			return null;
-		}
 		return new JLabel(new MancalaIcon(stones, mancalaShape, pitColor, stoneColor));
 	}
 
-	public JPanel drawPits()
+	public JPanel drawPits(Mancala game)
 	{
-		Mancala game = parent.getGame();
-
 		JPanel fullPanel = new JPanel(new BorderLayout());
 		fullPanel.setOpaque(false);
 		JPanel topPanel = new JPanel();
@@ -76,6 +57,7 @@ public abstract class AbstractBoard implements BoardStrategy
 		int[] player1Pits = game.checkPit1();
 		int[] player2Pits = game.checkPit2();
 
+		// Draws player B's pits and their stones
 		for (int i = 5; i >= 0; i--)
 		{
 			JPanel pitPanel = new JPanel(new BorderLayout());
@@ -88,6 +70,7 @@ public abstract class AbstractBoard implements BoardStrategy
 			PitIcon pit = new PitIcon(i, player2Pits[i], pitShape, pitColor, stoneColor);
 			JLabel label = new JLabel(pit);
 
+			// Makes player B's pits interactable if it's his turn
 			if (!turn)
 			{
 				label.addMouseListener(new MouseAdapter()
@@ -104,6 +87,7 @@ public abstract class AbstractBoard implements BoardStrategy
 		}
 
 
+		// Draws player A's pits and their stones
 		for (int i = 0; i <= 5; i++)
 		{
 			JPanel pitPanel = new JPanel(new BorderLayout());
@@ -116,6 +100,7 @@ public abstract class AbstractBoard implements BoardStrategy
 			PitIcon pit = new PitIcon(i, player1Pits[i], pitShape, pitColor, stoneColor);
 			JLabel label = new JLabel(pit);
 
+			// Makes player A's pits interactable if it's his turn
 			if (turn)
 			{
 				label.addMouseListener(new MouseAdapter()
@@ -144,10 +129,4 @@ public abstract class AbstractBoard implements BoardStrategy
 		g2.setColor(Color.BLACK);
 		g2.draw(boardShape);
 	}
-
-	protected JPanel getParent()
-	{
-		return parent;
-	}
-
 }

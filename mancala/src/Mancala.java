@@ -155,10 +155,10 @@ public class Mancala {
 		}
 
 		if(state1 == 0 || state2 == 0){ // Should trigger if either side of the board is empty. Alternatively could do state1 != 0 && state2 != 0
-			return false;
+			return true;
 		}
 		else{
-			return true;
+			return false;
 		}
 	}
 
