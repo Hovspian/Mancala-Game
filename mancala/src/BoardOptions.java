@@ -1,3 +1,4 @@
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -15,6 +16,17 @@ public class BoardOptions
 
 	public BoardOptions()
 	{
+		// Colors for the board and pit.
+
+		Color[] colors = new Color[] { Color.WHITE, Color.CYAN, Color.DARK_GRAY, Color.GRAY, Color.GREEN, Color.MAGENTA
+				, Color.ORANGE, Color.PINK, Color.RED, Color.BLUE, Color.YELLOW};
+
+		// This array is all the strings identical to the colors above, which will be used to access later
+		String[] color = new String[] { "White", "Cyan", "Dark_Gray", "Gray", "Green", "Magenta"
+				, "Orange", "Pink", "Red", "Blue", "Yellow"};
+
+
+
 		// First frame, asking for the board layout and amount of stones
 		JFrame frame = new JFrame();
 		frame.setTitle("Mancala v1 (CS151)");
@@ -33,6 +45,23 @@ public class BoardOptions
 		box.addItem("Simple");
 		box.addItem("Other");
 		boardPanel.add(box, BorderLayout.CENTER);
+
+		// Combo boxes for the colors
+		JPanel colorPanel = new JPanel();
+		colorPanel.setLayout(new BorderLayout());
+
+		JComboBox<String> boardColor = new JComboBox<String>();		
+		boardColor.addItem("Select Board Color");
+		JComboBox<String> pitColor = new JComboBox<String>();
+		pitColor.addItem("Select Pit Color");
+		for (int i = 0; i < colors.length; i++)
+		{
+			boardColor.addItem(color[i]); // Adds the string representations of each color.
+			pitColor.addItem(color[i]);
+		}
+		colorPanel.add(boardColor, BorderLayout.CENTER);
+		colorPanel.add(pitColor, BorderLayout.SOUTH);
+
 		JPanel pitPanel = new JPanel();
 		pitPanel.setBackground(Color.WHITE);
 		JButton accept = new JButton("Accept");
@@ -52,38 +81,77 @@ public class BoardOptions
 
 		frame.add(boardPanel, BorderLayout.NORTH);
 		frame.add(pitPanel, BorderLayout.CENTER);
+		frame.add(colorPanel, BorderLayout.WEST);
 		accept.addActionListener(new ActionListener()
 		{
 
 			public void actionPerformed(ActionEvent arg0) 
 			{
 				int stones = Integer.parseInt((String)pitNum.getSelectedItem()); // Gets the item chosen from the Combo Box
-				m = new Mancala("a", "b", stones);
+				m = new Mancala("A", "B", stones);
 
+
+				// Reading all of the choices in each box and putting it into the board
 				String format = (String) box.getSelectedItem();
+				String bC = (String) boardColor.getSelectedItem();
+				String pC = (String) pitColor.getSelectedItem();
+
+
+
+				Color num = null;
+				Color num2 = null;
+
+				// Each for loop tries to find the color's spot in the array based on the String location in it's array.
+				for (int z = 0; z < color.length; z++)
+				{
+					if (bC.equals(color[z]))
+					{
+						num = colors[z];
+						break;
+					}
+
+				}
+
+				for (int z = 0; z < color.length; z++)
+				{
+
+					if (pC.equals(color[z]))
+					{
+						num2 = colors[z];
+						break;
+					}
+				}
+				if (bC.equals("Select Board Color"))
+				{
+					num = Color.WHITE;
+				}
+				if (pC.equals("Select Pit Color"))
+				{
+					num2 = Color.WHITE;
+				}
+
 				if (format.equals("Simple"))
 				{
 					frame.dispose();
-					pickColorScheme("Simple"); // Frame disappears and a new appears asking for color choice
+					pickColorScheme("Simple", num, num2); // Added the two parameters, one for board and the other for pit colors
 
 				}
 				else if (format.equals("Other"))
 				{
 					frame.dispose();
-					pickColorScheme("Other");
+					pickColorScheme("Other", num, num2);
 				}
-
 			}			
 		});
 
 		frame.add(accept, BorderLayout.SOUTH); // Accept button that will transitions into different frames.
-		//
+		
 		frame.setLocation(800, 500); // Changes the location of the dialog box to start the game.
 		//Setting the dialog to be centered.
 
 
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setSize(new Dimension(400,150));
+		frame.pack();
 		frame.setVisible(true);
 	}
 
@@ -92,9 +160,10 @@ public class BoardOptions
 	 * @param b
 	 * @param stones
 	 */
-	public void generateGame(Board b, int stones)
+	private static void generateGame(Board b, int stones)
 	{
 		JFrame frame = new JFrame();
+		frame.setTitle("Mancala Project");
 		frame.setLayout(new BorderLayout());
 		JPanel gamePanel = new JPanel();
 		gamePanel.add(b);
@@ -116,8 +185,9 @@ public class BoardOptions
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Undoing");
-				m.undoBoard();
+				Mancala game = b.getGame();
+				game.undoBoard();
+
 			}
 
 		});
@@ -138,107 +208,29 @@ public class BoardOptions
 	 * This method is mainly responsible for the colors of the board.
 	 * @param s
 	 */
-	public void pickColorScheme(String s)
+	private void pickColorScheme(String s, Color bC, Color pC) // Added 2 parameters for the game, left the generateGame method alone so it will just forward the duty to it
 	{
-		// The first array is all of the colors.
-		Color[] colors = new Color[] { Color.WHITE, Color.CYAN, Color.DARK_GRAY, Color.GRAY, Color.GREEN, Color.MAGENTA
-				, Color.ORANGE, Color.PINK, Color.RED, Color.BLUE, Color.YELLOW};
-
-		// This array is all the strings identical to the colors above, which will be used to access later
-		String[] color = new String[] { "White", "Cyan", "Dark_Gray", "Gray", "Green", "Magenta"
-				, "Orange", "Pink", "Red", "Blue", "Yellow"};
 
 
-		JFrame frame = new JFrame(); // Frame that will hold all of the components.
-		JTextArea header = new JTextArea("Choose board color: ");
-		header.setEditable(false);
-		header.setOpaque(false);
-		JTextArea header2 = new JTextArea("Choose pit color: ");
-		header2.setEditable(false);
-		JComboBox<String> boardColor = new JComboBox<String>();
-		boardColor.setBackground(Color.WHITE);
-
-		JComboBox<String> pitColor = new JComboBox<String>();
-		pitColor.setBackground(Color.WHITE);
-		for (int i = 0; i < colors.length; i++)
+		if (s.equals("Simple"))
 		{
-			boardColor.addItem(color[i]); // Adds the string representations of each color.
-			pitColor.addItem(color[i]);
+
+			Board b = new Board(m, new SimpleBoard(bC, pC));
+			generateGame(b, 3); // Generates the board, Created a new constructor for this purpose
+			m.attach(b);
+		}
+		else if (s.equals("Other"))
+		{
+
+			Board b = new Board(m, new RigidBoard(bC, pC));
+			generateGame(b, 3);
+			m.attach(b);
 		}
 
-
-		JPanel boardColorP = new JPanel();
-		boardColorP.setBackground(Color.WHITE);
-		boardColorP.add(header, BorderLayout.NORTH);
-		boardColorP.add(boardColor, BorderLayout.CENTER);
-
-
-		JPanel pitColorP = new JPanel(); // Panel that has the combo box and text for pit color.
-		pitColorP.setBackground(Color.WHITE);
-		pitColorP.add(header2, BorderLayout.NORTH);
-		pitColorP.add(pitColor, BorderLayout.CENTER);
-
-		JButton start = new JButton("Start");
-		start.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				String bC = (String) boardColor.getSelectedItem();
-				String pC = (String) pitColor.getSelectedItem();
-				Color num = null;
-				Color num2 = null;
-
-				// Each for loop trys to find the color's spot in the array based on the String location in it's array.
-				for (int z = 0; z < color.length; z++)
-				{
-					if (bC.equals(color[z]))
-					{
-						num = colors[z];
-						break;
-					}
-
-				}
-
-				for (int z = 0; z < color.length; z++)
-				{
-
-					if (pC.equals(color[z]))
-					{
-						num2 = colors[z];
-						break;
-					}
-				}
-
-
-				if (s.equals("Simple"))
-				{
-					frame.dispose();
-					Board b = new Board(m, new SimpleBoard(num, num2));
-					generateGame(b, 3); // Generates the board, Created a new constructor for this purpose
-					m.attach(b);
-				}
-				else if (s.equals("Other"))
-				{
-					frame.dispose();
-					Board b = new Board(m, new RigidBoard(num, num2));
-					generateGame(b, 3);
-					m.attach(b);
-				}
-
-			}
-		});
-
-		frame.add(boardColorP, BorderLayout.NORTH);
-		frame.add(pitColorP, BorderLayout.CENTER);
-
-		frame.add(start, BorderLayout.SOUTH);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setLocation(880, 508);
-		frame.setVisible(true);
 	}
-	
+
+
+
 	public static void main(String[] args)
 	{
 		new BoardOptions();

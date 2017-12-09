@@ -84,4 +84,13 @@ public class Board extends JPanel implements ChangeListener
 		revalidate();
 		repaint();
 	}
+	
+	/**
+	 * Returns the game being used for the board.
+	 * @return the Mancala object for the board
+	 */
+	public Mancala getGame()
+	{
+		return game;
+	}
 }
