@@ -1,3 +1,4 @@
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -118,6 +119,7 @@ public class BoardOptions
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Undoing");
 				m.undoBoard();
+            
 			}
 
 		});
