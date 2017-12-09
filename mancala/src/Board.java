@@ -74,7 +74,7 @@ public class Board extends JPanel implements ChangeListener
 			
 			frame.add(winner);
 
-			frame.setLocation(800, 500);
+			frame.setLocation(880, 470);
 			frame.pack();
 			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			frame.setVisible(true);

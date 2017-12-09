@@ -50,9 +50,11 @@ public class BoardOptions
 		JPanel colorPanel = new JPanel();
 		colorPanel.setLayout(new BorderLayout());
 
-		JComboBox<String> boardColor = new JComboBox<String>();		
+		JComboBox<String> boardColor = new JComboBox<String>();	
+		boardColor.setBackground(Color.WHITE);
 		boardColor.addItem("Select Board Color");
 		JComboBox<String> pitColor = new JComboBox<String>();
+		pitColor.setBackground(Color.WHITE);
 		pitColor.addItem("Select Pit Color");
 		for (int i = 0; i < colors.length; i++)
 		{
