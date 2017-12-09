@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.geom.*;
 
+// Produces a style for the game board
 public class RigidBoard extends AbstractBoard
 {
 	public RigidBoard() 
