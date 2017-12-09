@@ -16,12 +16,15 @@ public class BoardOptions
 
 	public BoardOptions()
 	{
+		//First part of the edit, the colors for the board and pit. -------------------------------------------------------------------------------------
+		
 		Color[] colors = new Color[] { Color.WHITE, Color.CYAN, Color.DARK_GRAY, Color.GRAY, Color.GREEN, Color.MAGENTA
 				, Color.ORANGE, Color.PINK, Color.RED, Color.BLUE, Color.YELLOW};
 		
 		// This array is all the strings identical to the colors above, which will be used to access later
 		String[] color = new String[] { "White", "Cyan", "Dark_Gray", "Gray", "Green", "Magenta"
 				, "Orange", "Pink", "Red", "Blue", "Yellow"};
+		// End of the edit ----------------------------------------------------------------------------------------------------
 		
 		
 		
@@ -44,9 +47,11 @@ public class BoardOptions
 		box.addItem("Other");
 		boardPanel.add(box, BorderLayout.CENTER);
 		
+		// Beginning of second edit, where the combo boxes for the colors begins -----------------------------------------------
 		JPanel colorPanel = new JPanel();
 		colorPanel.setLayout(new BorderLayout());
-		JComboBox boardColor = new JComboBox();
+		
+		JComboBox boardColor = new JComboBox();		
 		boardColor.addItem("Select Board Color");
 		JComboBox pitColor = new JComboBox();
 		pitColor.addItem("Select Pit Color");
@@ -57,6 +62,7 @@ public class BoardOptions
 		}
 		colorPanel.add(boardColor, BorderLayout.CENTER);
 		colorPanel.add(pitColor, BorderLayout.SOUTH);
+		// End of second edit, where the combo boxes for the colors begins -----------------------------------------------
 		
 		JPanel pitPanel = new JPanel();
 		pitPanel.setBackground(Color.WHITE);
@@ -77,7 +83,7 @@ public class BoardOptions
 
 		frame.add(boardPanel, BorderLayout.NORTH);
 		frame.add(pitPanel, BorderLayout.CENTER);
-		frame.add(colorPanel, BorderLayout.WEST);
+		frame.add(colorPanel, BorderLayout.WEST); // Added this panel for the colors. -3rd edit-
 		accept.addActionListener(new ActionListener()
 		{
 
@@ -86,6 +92,8 @@ public class BoardOptions
 				int stones = Integer.parseInt((String)pitNum.getSelectedItem()); // Gets the item chosen from the Combo Box
 				m = new Mancala("a", "b", stones);
 
+				
+				// Beginning of last edit, Reading all of the choices in each box and putting it into the board --------------------------------------------
 				String format = (String) box.getSelectedItem();
 				String bC = (String) boardColor.getSelectedItem();
 				String pC = (String) pitColor.getSelectedItem();
@@ -127,7 +135,7 @@ public class BoardOptions
 				if (format.equals("Simple"))
 				{
 					frame.dispose();
-					pickColorScheme("Simple", num, num2); // Frame disappears and a new appears asking for color choice
+					pickColorScheme("Simple", num, num2); // Added the two parameters, one for board and the other for pit colors
 
 				}
 				else if (format.equals("Other"))
@@ -135,7 +143,7 @@ public class BoardOptions
 					frame.dispose();
 					pickColorScheme("Other", num, num2);
 				}
-
+				// End of 3rd edit ----------------------------------------------------------
 			}			
 		});
 
