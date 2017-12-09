@@ -1,3 +1,4 @@
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -116,7 +117,10 @@ public class BoardOptions
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				b.getGame().undoBoard();
+				//b.getGame().undoBoard();
+                                Mancala test = b.getGame();
+                                test.undoBoard();
+                                
 			}
 
 		});
