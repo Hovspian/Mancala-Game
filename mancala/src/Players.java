@@ -21,7 +21,7 @@ public class Players {
 	}
 
 	public int[] getBoard(){
-		return this.board;
+		return board;
 	}
 
 	public void setBoard(int[] playerBoard){
@@ -32,7 +32,7 @@ public class Players {
 		int playerStone = this.board[index]; //hold all stones in picked pit in hand
 		this.board[index] = 0; //since all stones are picked up the picked pit is now empty
 		int set = index + 1; //first stone dropped from hand goes into the next pit
-		int[] otherBoard = other.getBoard(); //may need the other player's board
+		int[] otherBoard = other.getBoard().clone(); //may need the other player's board
 		while(playerStone > 0){ //while stones are left in hand
 			for(int i = set; i < 7 && playerStone != 0; i++){ //either out of pits on current player side or run out of stones
 				this.board[i] += 1; //add a stone to this pit
