@@ -15,6 +15,8 @@ public class Mancala {
     private int[] lastState2; //these two are for copying the last state so we can use it to undo
     private boolean turn; //true == player1's turn; false == player2's turn
     private ArrayList<ChangeListener> listeners = new ArrayList<ChangeListener>();
+    boolean prevTurn;
+    int start;
     
     public Mancala(String name1, String name2, int stones){ //determine if we want to randomize the turn, select a turn
         p1 = new Players(name1, stones);
@@ -22,6 +24,8 @@ public class Mancala {
         p1Undos = 3;
         p2Undos = 3;
         turn = true; //true = player1 turn
+        prevTurn = false; 
+        start = 0;
     }
     
     public void attach(ChangeListener l){
@@ -46,8 +50,8 @@ public class Mancala {
         return p2.getBoard();
     }
     public String winner(){//called when there's no more undo to do, at the very end to determine winner
-        lastState1 = p1.getBoard();
-        lastState2 = p2.getBoard();
+        lastState1 = p1.getBoard().clone();
+        lastState2 = p2.getBoard().clone();
         if(lastState1[6] > lastState2[6]){
             return p1.getName();
         }
@@ -60,10 +64,11 @@ public class Mancala {
     }
     
     public void pitLogic(int pit){ //need the index or location
-        lastState1 = p1.getBoard();
-        lastState2 = p2.getBoard();
+        lastState1 = p1.getBoard().clone();
+        lastState2 = p2.getBoard().clone();
+        start = 1;
         int index = pit;
-        boolean prevTurn = turn;
+        prevTurn = turn;
         if(turn){
             if(lastState1[index] == 0){
                 return;
@@ -80,7 +85,6 @@ public class Mancala {
             turn = !turn;
         }
         notifyListeners();
-        //testing? confusing
         for (int i = 6; i >= 0; i--)
         	System.out.print(p2.getBoard()[i] + " ");
         System.out.println();
@@ -90,29 +94,50 @@ public class Mancala {
     }
     
     public void undoBoard(){
-        if(turn){ //The turn the undo is called on takes away the other turn's undo amount.
+        if(start != 0){//this ensures undo is unavailable until at least one move has been made
+        if(turn && turn != prevTurn){ //The turn the undo is called on takes away the other turn's undo amount.
             //take away player 2's undo
             if(p2Undos == 0){
                 return; //nothing gets done if they are out of undos
             }
             p2Undos--;
+            turn = prevTurn;
         }
-        else{
+        else if(!turn && turn != prevTurn){
             
+            if(p1Undos == 0){
+                return;
+            }
+            p1Undos--;
+            turn = prevTurn;
+        }
+        else if(turn && turn == prevTurn){ 
             if(p1Undos == 0){
                 return;
             }
             p1Undos--;
         }
         
+        else{
+        if(!turn && turn != prevTurn){ 
+        
+            if(p2Undos == 0){
+                return;
+            }
+            p2Undos--;                
+        }
+
+        }
+
         p1.setBoard(lastState1);
         p2.setBoard(lastState2);
         notifyListeners();
     }
+    }
     
     public boolean checkEnd(){ //returns false is the game is not over, returns true if one side of the board is cleared
-        int[] testState1 = p1.getBoard();
-        int[] testState2 = p2.getBoard();
+        int[] testState1 = p1.getBoard().clone();
+        int[] testState2 = p2.getBoard().clone();
         int state1 = 0;
         int state2 = 0;
         
@@ -131,7 +156,7 @@ public class Mancala {
     
     public void finalMove(){//call this once checkEnd has run to see if its over or not. THERE IS NO UNDO FROM THIS POINT
         if (turn){//player 1's turn
-            lastState1 = p1.getBoard();
+            lastState1 = p1.getBoard().clone();
             int sum = 0;
             for(int i = 0; i < 6; i++){
                 sum += lastState1[i];
@@ -140,7 +165,7 @@ public class Mancala {
             p1.setBoard(lastState1);
         }
         if(!turn){
-            lastState2 = p2.getBoard();
+            lastState2 = p2.getBoard().clone();
             int sum = 0;
             for(int i = 0; i < 6; i++){
                 sum += lastState2[i];
