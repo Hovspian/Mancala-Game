@@ -17,15 +17,12 @@ public class BoardOptions
 	public BoardOptions()
 	{
 		// Colors for the board and pit.
-
 		Color[] colors = new Color[] { Color.WHITE, Color.CYAN, Color.DARK_GRAY, Color.GRAY, Color.GREEN, Color.MAGENTA
 				, Color.ORANGE, Color.PINK, Color.RED, Color.BLUE, Color.YELLOW};
 
 		// This array is all the strings identical to the colors above, which will be used to access later
 		String[] color = new String[] { "White", "Cyan", "Dark_Gray", "Gray", "Green", "Magenta"
 				, "Orange", "Pink", "Red", "Blue", "Yellow"};
-
-
 
 		// First frame, asking for the board layout and amount of stones
 		JFrame frame = new JFrame();
@@ -84,6 +81,7 @@ public class BoardOptions
 		frame.add(boardPanel, BorderLayout.NORTH);
 		frame.add(pitPanel, BorderLayout.CENTER);
 		frame.add(colorPanel, BorderLayout.WEST);
+
 		accept.addActionListener(new ActionListener()
 		{
 
@@ -92,12 +90,10 @@ public class BoardOptions
 				int stones = Integer.parseInt((String)pitNum.getSelectedItem()); // Gets the item chosen from the Combo Box
 				m = new Mancala("A", "B", stones);
 
-
 				// Reading all of the choices in each box and putting it into the board
 				String format = (String) box.getSelectedItem();
 				String bC = (String) boardColor.getSelectedItem();
 				String pC = (String) pitColor.getSelectedItem();
-
 
 
 				Color num = null;
@@ -189,7 +185,6 @@ public class BoardOptions
 			public void actionPerformed(ActionEvent e) {
 				Mancala game = b.getGame();
 				game.undoBoard();
-
 			}
 
 		});
@@ -202,7 +197,7 @@ public class BoardOptions
 		frame.add(buttonPanel, BorderLayout.SOUTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
-		frame.setLocation(500, 300);
+		frame.setLocation(500, 400);
 		frame.setVisible(true);
 	}
 
@@ -212,8 +207,6 @@ public class BoardOptions
 	 */
 	private void pickColorScheme(String s, Color bC, Color pC) // Added 2 parameters for the game, left the generateGame method alone so it will just forward the duty to it
 	{
-
-
 		if (s.equals("Simple"))
 		{
 
@@ -230,8 +223,6 @@ public class BoardOptions
 		}
 
 	}
-
-
 
 	public static void main(String[] args)
 	{
