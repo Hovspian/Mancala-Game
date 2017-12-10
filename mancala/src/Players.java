@@ -1,5 +1,10 @@
 
-
+/**
+ * This class is responsible for the game logic of the program.
+ * It will contain information on the player, as well as the amount of stones that player has.
+ * @author Andy, Hovsep Lalikian, Aldrich
+ *
+ */
 public class Players {
 	private String name;
 	private int[] board; //6 is mancala, 0-5 are the pits from left to right from player's perspective
@@ -14,14 +19,26 @@ public class Players {
 
 	}
 
+	/**
+	 * This method will return the name of the player
+	 * @return the name of the player
+	 */
 	public String getName(){
 		return this.name;
 	}
-
+	
+	/**
+	 * This method will get the board of the player 
+	 * @return the player's side of the board.
+	 */
 	public int[] getBoard(){
 		return board;
 	}
-
+	
+	/**
+	 * This method will set the player's board based on the clicked pit.
+	 * @param playerBoard the new board
+	 */
 	public void setBoard(int[] playerBoard){
 		this.board = playerBoard;
 	}
