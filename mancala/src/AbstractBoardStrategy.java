@@ -80,7 +80,6 @@ public abstract class AbstractBoardStrategy implements BoardStrategy
 				{
 					public void mouseClicked(MouseEvent e)
 					{
-						System.out.println("Clicked B");
 						game.pitLogic(pit.getIndex());
 					}
 				});
@@ -110,7 +109,6 @@ public abstract class AbstractBoardStrategy implements BoardStrategy
 				{
 					public void mouseClicked(MouseEvent e)
 					{
-						System.out.println("Clicked A");
 						game.pitLogic(pit.getIndex());
 					}
 				});

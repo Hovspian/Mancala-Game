@@ -53,14 +53,6 @@ public class Mancala {
 		for(ChangeListener l : listeners){
 			l.stateChanged(new ChangeEvent(this));
 		}
-
-		// Print statements to test board state. Remove before submitting
-		for (int i = 6; i >= 0; i--)
-			System.out.print(p2.getBoard()[i] + " ");
-		System.out.println();
-		for (int i : p1.getBoard())
-			System.out.print(i + " ");
-		System.out.println();
 	}
 
 	public boolean getTurn(){
