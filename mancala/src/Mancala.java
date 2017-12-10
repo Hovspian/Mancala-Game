@@ -3,7 +3,11 @@ import java.util.ArrayList;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
+/**
+ * This Class is responsible for the modeling of the Mancala game, it will serve as the actual game logic that will fit in with the board.
+ * @author Andy, Hovsep, Aldrich 
+ *
+ */
 public class Mancala {
 
 	private Players p1;
@@ -17,6 +21,12 @@ public class Mancala {
 	boolean prevTurn;
 	int start; // Could also turn this into a boolean since it's only 0 or 1
 
+	/**
+	 * This constructor will produce the players, as well as the stone number for each pit (either 3 or 4)
+	 * @param name1 The name of the first player
+	 * @param name2 The name of the second player
+	 * @param stones The number of stones to be used in the game.
+	 */
 	public Mancala(String name1, String name2, int stones){ //determine if we want to randomize the turn, select a turn
 		p1 = new Players(name1, stones);
 		p2 = new Players(name2, stones);
@@ -27,10 +37,18 @@ public class Mancala {
 		start = 0;
 	}
 
+	/**
+	 * This method will attach a changelistener to the program.
+	 * @param l the changelistener to be added.
+	 */
 	public void attach(ChangeListener l){
 		listeners.add(l);
 	}
 
+	/**
+	 * This method will notify the changelisteners when the model changes.
+	 * The view will update to the corresponding changes.
+	 */
 	public void notifyListeners(){
 		for(ChangeListener l : listeners){
 			l.stateChanged(new ChangeEvent(this));
@@ -49,13 +67,26 @@ public class Mancala {
 		return this.turn;
 	}
 
+	/**
+	 * This method will return the first player's current board.
+	 * @return board the first Players board.
+	 */
 	public int[] checkPit1(){
 		return p1.getBoard();
 	}
-
+	
+	/**
+	 * This method will return the second player's current board.
+	 * @return board the second players board
+	 */
 	public int[] checkPit2(){
 		return p2.getBoard();
 	}
+	
+	/**
+	 * This method will return the Winner of the game
+	 * @return the name of the winner of the Mancala Game.
+	 */
 	public String winner(){//called when there's no more undo to do, at the very end to determine winner
 		lastState1 = p1.getBoard().clone();
 		lastState2 = p2.getBoard().clone();
@@ -70,6 +101,11 @@ public class Mancala {
 		}
 	}
 
+	/**
+	 * This method will move the stones in it's respective pits, based on the pit that was clicked on in the view.
+	 * 
+	 * @param pit the pit that was clicked on the view.
+	 */
 	public void pitLogic(int pit){ //need the index or location
 		lastState1 = p1.getBoard().clone();
 		lastState2 = p2.getBoard().clone();
@@ -88,12 +124,17 @@ public class Mancala {
 			}
 			turn = p2.moveStone(p1, index, turn); //moves everything and sets turn
 		}
-		if (checkEnd() && prevTurn == turn){ //Because moveStone changes the turn based on the set rules, this checks if the game ends and flips the turn so that the other player can go through final step
-			turn = !turn;
+		if (checkEnd()){ //Because moveStone changes the turn based on the set rules, this checks if the game ends and flips the turn so that the other player can go through final step
+			finalMove();
+			
 		}
 		notifyListeners();
 	}
 
+	/**
+	 * This method will undo the turn that was previously done.
+	 * 3 undos per player.
+	 */
 	public void undoBoard(){
 		// I think it's a little more clear to do if (start == 0) return then do everything else after 
 		if(start != 0){//this ensures undo is unavailable until at least one move has been made
@@ -143,6 +184,11 @@ public class Mancala {
 		}
 	}
 
+	/**
+	 * This method will check if one side of the board is completely empty.
+	 * In this case the game will be over.
+	 * @return true if the Game is over, False if it isn't.
+	 */
 	public boolean checkEnd(){ //returns false is the game is not over, returns true if one side of the board is cleared
 		int[] testState1 = p1.getBoard(); // Doesn't need to be a clone because values won't change during method execution
 		int[] testState2 = p2.getBoard();
@@ -162,6 +208,9 @@ public class Mancala {
 		}
 	}
 
+	/**
+	 * This method will move the rest of the stones of the player's board into the mancala pits.
+	 */
 	public void finalMove(){//call this once checkEnd has run to see if its over or not. THERE IS NO UNDO FROM THIS POINT
 		lastState1 = p1.getBoard();
 		int sum1 = 0;
