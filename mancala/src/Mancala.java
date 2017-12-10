@@ -35,7 +35,7 @@ public class Mancala {
 		for(ChangeListener l : listeners){
 			l.stateChanged(new ChangeEvent(this));
 		}
-		
+
 		// Print statements to test board state. Remove before submitting
 		for (int i = 6; i >= 0; i--)
 			System.out.print(p2.getBoard()[i] + " ");
@@ -163,26 +163,24 @@ public class Mancala {
 	}
 
 	public void finalMove(){//call this once checkEnd has run to see if its over or not. THERE IS NO UNDO FROM THIS POINT
-		if (turn){//player 1's turn
-			lastState1 = p1.getBoard();
-			int sum = 0;
-			for(int i = 0; i < 6; i++){
-				sum += lastState1[i];
-				lastState1[i] = 0; // Need to move the stones in pits to the mancala
-			}
-			lastState1[6] += sum; // += to add the sum to the mancala instead of setting it to the sum
-			p1.setBoard(lastState1);
+		lastState1 = p1.getBoard();
+		int sum1 = 0;
+		for(int i = 0; i < 6; i++){
+			sum1 += lastState1[i];
+			lastState1[i] = 0; // Need to move the stones in pits to the mancala
 		}
-		else{
-			lastState2 = p2.getBoard();
-			int sum = 0;
-			for(int i = 0; i < 6; i++){
-				sum += lastState2[i];
-				lastState2[i] = 0;
-			}
-			lastState2[6] += sum;
-			p2.setBoard(lastState2);
+		lastState1[6] += sum1; // += to add the sum to the mancala instead of setting it to the sum
+		p1.setBoard(lastState1);
+
+
+		lastState2 = p2.getBoard();
+		int sum2 = 0;
+		for(int i = 0; i < 6; i++){
+			sum2 += lastState2[i];
+			lastState2[i] = 0;
 		}
+		lastState2[6] += sum2;
+		p2.setBoard(lastState2);
 	}
 
 
