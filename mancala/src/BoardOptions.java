@@ -4,16 +4,20 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-
+/**
+ * This class is responsible for creating the formatting options of the game. 
+ * You will be able to choose the format and color scheme of the game and apply it to the game board.
+ * @author Andy, Hovsep, Aldrich
+ *
+ */
 public class BoardOptions 
 {
 	private Mancala m;
+	
 	/**
-	 * Using Andy's code of the game, using this constructor will create a frame asking for the layout of the board, as well as the color scheme 
-	 * and number of stones for the game. Once each is accepted, a frame appears that shows the mancala board.
-	 * 
+	 * This constructor will produce the initial frame that will allow you to choose the frame
+	 * and colors of the board.
 	 */
-
 	public BoardOptions()
 	{
 		// Colors for the board and pit.
@@ -84,7 +88,7 @@ public class BoardOptions
 
 		accept.addActionListener(new ActionListener()
 		{
-
+			
 			public void actionPerformed(ActionEvent arg0) 
 			{
 				int stones = Integer.parseInt((String)pitNum.getSelectedItem()); // Gets the item chosen from the Combo Box
@@ -155,8 +159,8 @@ public class BoardOptions
 
 	/**
 	 * This method will generate the game, based on the board choice/color scheme
-	 * @param b
-	 * @param stones
+	 * @param b the type of board that this game will be played on.
+	 * @param stones The amount of stones that will be inputed into the board.
 	 */
 	private static void generateGame(Board b, int stones)
 	{
@@ -203,7 +207,9 @@ public class BoardOptions
 
 	/**
 	 * This method is mainly responsible for the colors of the board.
-	 * @param s
+	 * @param s The String that will determine what kind of board will be implemented.
+	 * @param bC the color of the board.
+	 * @param pC the Color of the pits.
 	 */
 	private void pickColorScheme(String s, Color bC, Color pC) // Added 2 parameters for the game, left the generateGame method alone so it will just forward the duty to it
 	{
@@ -223,7 +229,10 @@ public class BoardOptions
 		}
 
 	}
-
+	/**
+	 * This is the main method that will be used to run the Mancala Game.
+	 * @param args the argument for the program to run.
+	 */
 	public static void main(String[] args)
 	{
 		new BoardOptions();
