@@ -60,8 +60,6 @@ public class Board extends JPanel implements ChangeListener
 	{
 		if (game.checkEnd()) // If game's over do the final move and make a frame to show winner
 		{
-			game.finalMove();
-
 			JFrame frame = new JFrame();
 
 			JTextArea winner = new JTextArea("Player " + game.winner() + " wins!");
