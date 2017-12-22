@@ -138,10 +138,10 @@ public class BoardOptions
 					pickColorScheme("Simple", num, num2); // Added the two parameters, one for board and the other for pit colors
 
 				}
-				else if (format.equals("Other"))
+				else if (format.equals("Rigid"))
 				{
 					frame.dispose();
-					pickColorScheme("Other", num, num2);
+					pickColorScheme("Rigid", num, num2);
 				}
 			}			
 		});
@@ -220,7 +220,7 @@ public class BoardOptions
 			generateGame(b, 3); // Generates the board, Created a new constructor for this purpose
 			m.attach(b);
 		}
-		else if (s.equals("Other"))
+		else if (s.equals("Rigid"))
 		{
 
 			Board b = new Board(m, new RigidBoard(bC, pC));
