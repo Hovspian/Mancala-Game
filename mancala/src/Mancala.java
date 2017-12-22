@@ -10,8 +10,8 @@ import javax.swing.event.ChangeListener;
  */
 public class Mancala {
 
-	private Players p1;
-	private Players p2;
+	private Player p1;
+	private Player p2;
 	private int p1Undos;
 	private int p2Undos;
 	private int[] lastState1;
@@ -19,7 +19,7 @@ public class Mancala {
 	private boolean turn; //true == player1's turn; false == player2's turn
 	private ArrayList<ChangeListener> listeners = new ArrayList<ChangeListener>();
 	boolean prevTurn;
-	int start; // Could also turn this into a boolean since it's only 0 or 1
+	boolean start;
 
 	/**
 	 * This constructor will produce the players, as well as the stone number for each pit (either 3 or 4)
@@ -28,13 +28,13 @@ public class Mancala {
 	 * @param stones The number of stones to be used in the game.
 	 */
 	public Mancala(String name1, String name2, int stones){ //determine if we want to randomize the turn, select a turn
-		p1 = new Players(name1, stones);
-		p2 = new Players(name2, stones);
+		p1 = new Player(name1, stones);
+		p2 = new Player(name2, stones);
 		p1Undos = 3;
 		p2Undos = 3;
 		turn = true; //true = player1 turn
 		prevTurn = false; 
-		start = 0;
+		start = true;
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class Mancala {
 	public int[] checkPit1(){
 		return p1.getBoard();
 	}
-	
+
 	/**
 	 * This method will return the second player's current board.
 	 * @return board the second players board
@@ -74,7 +74,7 @@ public class Mancala {
 	public int[] checkPit2(){
 		return p2.getBoard();
 	}
-	
+
 	/**
 	 * This method will return the Winner of the game
 	 * @return the name of the winner of the Mancala Game.
@@ -101,24 +101,23 @@ public class Mancala {
 	public void pitLogic(int pit){ //need the index or location
 		lastState1 = p1.getBoard().clone();
 		lastState2 = p2.getBoard().clone();
-		start = 1;
-		int index = pit;
+		start = false;
 		prevTurn = turn;
 		if(turn){
-			if(lastState1[index] == 0){
+			if(lastState1[pit] == 0){
 				return;
 			}
-			turn = p1.moveStone(p2, index, turn); //lastState is already set by this point for the undo
+			turn = p1.moveStone(p2, pit, turn); //lastState is already set by this point for the undo
 		}
 		else{
-			if(lastState2[index] == 0){
+			if(lastState2[pit] == 0){
 				return;
 			}
-			turn = p2.moveStone(p1, index, turn); //moves everything and sets turn
+			turn = p2.moveStone(p1, pit, turn); //moves everything and sets turn
 		}
 		if (checkEnd()){ //Because moveStone changes the turn based on the set rules, this checks if the game ends and flips the turn so that the other player can go through final step
 			finalMove();
-			
+
 		}
 		notifyListeners();
 	}
@@ -128,52 +127,32 @@ public class Mancala {
 	 * 3 undos per player.
 	 */
 	public void undoBoard(){
-		// I think it's a little more clear to do if (start == 0) return then do everything else after 
-		if(start != 0){//this ensures undo is unavailable until at least one move has been made
-			/* You could remove some repetitive code by doing 
-			 * if (turn)
-			 * 		stuff
-			 * 		if (turn != prevTurn)
-			 * 			turn = prevTurn
-			 */
-			if(turn && turn != prevTurn){ //The turn the undo is called on takes away the other turn's undo amount.
-				//take away player 2's undo
-				if(p2Undos == 0){
-					return; //nothing gets done if they are out of undos
-				}
-				p2Undos--;
+		if(start) //this ensures undo is unavailable until at least one move has been made
+			return;
+		if(turn){ //The turn the undo is called on takes away the other turn's undo amount.
+			//take away player 2's undo
+			if(p2Undos == 0){
+				return; //nothing gets done if they are out of undos
+			}
+			p2Undos--;
+			if (turn != prevTurn)
 				turn = prevTurn;
-			}
-			else if(!turn && turn != prevTurn){
-
-				if(p1Undos == 0){
-					return;
-				}
-				p1Undos--;
-				turn = prevTurn;
-			}
-			else if(turn && turn == prevTurn){ 
-				if(p1Undos == 0){
-					return;
-				}
-				p1Undos--;
-			}
-
-			else{
-				if(!turn && turn != prevTurn){ 
-
-					if(p2Undos == 0){
-						return;
-					}
-					p2Undos--;                
-				}
-
-			}
-
-			p1.setBoard(lastState1);
-			p2.setBoard(lastState2);
-			notifyListeners();
 		}
+		else{
+			if(p1Undos == 0){
+				return;
+			}
+			p1Undos--;
+			if (turn != prevTurn)
+				turn = prevTurn;
+		}
+
+
+
+		p1.setBoard(lastState1);
+		p2.setBoard(lastState2);
+		notifyListeners();
+
 	}
 
 	/**
@@ -203,7 +182,7 @@ public class Mancala {
 	/**
 	 * This method will move the rest of the stones of the player's board into the mancala pits.
 	 */
-	public void finalMove(){//call this once checkEnd has run to see if its over or not. THERE IS NO UNDO FROM THIS POINT
+	private void finalMove(){//call this once checkEnd has run to see if its over or not. THERE IS NO UNDO FROM THIS POINT
 		lastState1 = p1.getBoard();
 		int sum1 = 0;
 		for(int i = 0; i < 6; i++){

@@ -44,7 +44,7 @@ public class BoardOptions
 		JComboBox<String> box = new JComboBox<String>();
 		box.setBackground(Color.WHITE);
 		box.addItem("Simple");
-		box.addItem("Other");
+		box.addItem("Rigid");
 		boardPanel.add(box, BorderLayout.CENTER);
 
 		// Combo boxes for the colors

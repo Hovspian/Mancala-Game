@@ -14,6 +14,7 @@ import javax.swing.*;
 public abstract class AbstractPitIcon implements Icon
 {
 	private int stones;
+	private Shape shape;
 	private int width;
 	private int height;
 	private Color pitColor;
@@ -22,16 +23,16 @@ public abstract class AbstractPitIcon implements Icon
 	/**
 	 * Constructs an icon for a pit with the specified size, colors, and stones
 	 * @param stones the number of stones in the pit
-	 * @param width the width of the pit
-	 * @param height the height of the pit
+	 * @param shape the Shape of the pit
 	 * @param pitColor the color of the pit
 	 * @param stoneColor the color of the stones
 	 */
-	public AbstractPitIcon(int stones, double width, double height, Color pitColor, Color stoneColor)
+	public AbstractPitIcon(int stones, Shape shape, Color pitColor, Color stoneColor)
 	{
 		this.stones = stones;
-		this.width = (int) width;
-		this.height = (int) height;
+		this.shape = shape;
+		this.width = (int) (shape.getBounds().getWidth() + 1);
+		this.height = (int) shape.getBounds().getHeight();
 		this.pitColor = pitColor;
 		this.stoneColor = stoneColor;
 	}
@@ -74,5 +75,41 @@ public abstract class AbstractPitIcon implements Icon
 	public Color getStoneColor()
 	{
 		return stoneColor;
+	}
+	
+	@Override
+	public void paintIcon(Component c, Graphics g, int x, int y) 
+	{
+		Graphics2D g2 = (Graphics2D) g;
+
+		g2.setColor(getPitColor());
+		g2.fill(shape);
+		g2.setColor(Color.BLACK);
+		g2.draw(shape);
+
+		g2.setColor(getStoneColor());
+		drawStones(g2);
+	}
+
+	/**
+	 * Draws the stones for the pit.
+	 * @param g2 the Graphics2D object being used to draw the stones
+	 */
+	private void drawStones(Graphics2D g2)
+	{
+		final int STONE_SIZE = BoardStrategy.STONE_SIZE;
+
+		int stonesDrawn = 0;
+		int xPos = getIconWidth() / 6;
+		int yPos = getIconHeight() / 4;
+		while (stonesDrawn < getStones())
+		{
+			xPos = getIconWidth() / 10 + stonesDrawn % 7 * STONE_SIZE / 2 + STONE_SIZE;
+			yPos = getIconHeight() / 4 + stonesDrawn / 7 * STONE_SIZE / 2 + STONE_SIZE;
+
+			g2.fill(new Ellipse2D.Double(xPos + ((stonesDrawn % 7) * (STONE_SIZE / 2)), yPos + stonesDrawn / 7 * STONE_SIZE / 2, STONE_SIZE, STONE_SIZE));			
+
+			stonesDrawn++;
+		}
 	}
 }

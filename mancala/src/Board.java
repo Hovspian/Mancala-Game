@@ -60,28 +60,45 @@ public class Board extends JPanel implements ChangeListener
 	{
 		if (game.checkEnd()) // If game's over do the final move and make a frame to show winner
 		{
-			JFrame frame = new JFrame();
-
-			JTextArea winner = new JTextArea("Player " + game.winner() + " wins!");
-			winner.setEditable(false);
-			winner.setBackground(Color.WHITE);
-			
-			Font f = winner.getFont();
-			f = new Font(f.getFontName(), f.getStyle(), 30);
-			winner.setFont(f);
-			
-			frame.add(winner);
-
-			frame.setLocation(880, 470);
-			frame.pack();
-			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			frame.setVisible(true);
+			drawEnd();
 		}
 
 		draw();
 		revalidate();
 		repaint();
 	}
+	
+	/**
+	 * Creates a new frame to display the winner
+	 */
+	private void drawEnd()
+	{
+		JFrame frame = new JFrame();
+
+		JTextArea winner = new JTextArea();
+		
+		if (game.winner().equals("Tie"))
+		{
+			winner.setText("It's a tie!");
+		}
+		else
+			winner.setText("Player " + game.winner() + " wins!");
+		
+		winner.setEditable(false);
+		winner.setBackground(Color.WHITE);
+		
+		Font f = winner.getFont();
+		f = new Font(f.getFontName(), f.getStyle(), 30);
+		winner.setFont(f);
+		
+		frame.add(winner);
+
+		frame.setLocation(880, 470);
+		frame.pack();
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setVisible(true);
+	}
+	
 	
 	/**
 	 * Returns the game being used for the board.
